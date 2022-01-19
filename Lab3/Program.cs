@@ -1,9 +1,10 @@
 ﻿using Lab3;
 
-int found = AddOrRemove.SearchStore();
+int found = find.SearchStore();
 int input = int.Parse(Console.ReadLine());
-int books = AddOrRemove.FindBooks(found, input);
+int books = find.FindBooks(found, input);
 Console.WriteLine(books);
+AddOrRemove.Remove(found,books);
 
 
 

@@ -1,90 +1,99 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lab3;
-using Lab3.Models;
+﻿using Lab3;
 using Lab3.Data;
+using Lab3.Models;
 
 namespace Lab3
 {
     public class AddOrRemove
+
     {
-        public static int SearchStore()
+        static public void Add(int storeId, int bookId)
         {
+
+
+
             using var context = new Lab2DatabaseContext();
             {
-                var store = context.Stores.ToList();
-
-                foreach (var item in store)
+                var inventory = context.Inventories.Where(i => i.StoreId == storeId).ToList();
+                var book = context.Books.Select(b => b.Isbn13).ToList();
+                var count = context.Inventories.Count();
+                if (inventory.Exists(i => i.Isbn == book[bookId]))
                 {
-                    Console.WriteLine($"({item.Id}) {item.StoreName}");
-                }
+                    Console.WriteLine(" Hur många böker vill du ha?");
+                    string input = Console.ReadLine();
 
-                int id;
-                string input = Console.ReadLine();
+                    if (int.TryParse(input, out int amount))
+                    {
 
-                if (int.TryParse(input, out id))
-                {
-                    return id;
-                }
-                return -1;
-            }
-        }
 
-        public static int FindBooks(int storeId, int addOrRemove)
-        {
-            using var context = new Lab2DatabaseContext();
-            {
-                var amount = context.Books.Count();
-                var books = context.Books.ToList();
-                var inventory = context.Inventories.ToList();
-
-                switch (addOrRemove)
-                {
-                    case -2:
-
+                        foreach (var found in inventory)
                         {
-                            inventory = context.Inventories.Where(i => i.StoreId == storeId)
-                                                           .ToList();
-                            for (int i = 0; i < inventory.Count; i++)
+                            if (found != null && found.Isbn == book[bookId] && found.StoreId == storeId)
                             {
-                                int j = i + 1;
-                                books = context.Books.Where(b => b.Isbn13 == inventory[i].Isbn).ToList();
-                                
-                                Console.WriteLine($"({j}) titel: {books[0].Title} amount: {inventory[i].Stock}");
+                                found.Stock = amount + found.Stock;
+                                context.SaveChanges();
                             }
-
-                            break;
                         }
-                    default:
-                        {
-                            int i = 0;
-                            foreach (var item in books)
-                            {i++;
-                                Console.WriteLine($"({i}) titel:{item.Title}");
-                            }
 
-                            break;
 
-                        }
-                        
+                    }
                 }
-                int bookindex;
+                else if (inventory.Exists(i => i.Isbn != book[bookId]))
 
-                string input2 = Console.ReadLine();
-                if (int.TryParse(input2, out bookindex))
                 {
-                    return bookindex;
+                    Console.WriteLine(" Hur många böker vill du ha?");
+                    string input = Console.ReadLine();
 
+                    if (int.TryParse(input, out int amount))
+                    {
+                        var newInventory = new Inventory { Isbn = book[bookId], StoreId = storeId, Stock = amount };
+                        context.Inventories.Add(newInventory);
+                        context.SaveChanges();
+
+
+                    }
                 }
 
 
             }
 
-            return 0;
-        }
 
+        }
+        public static void Remove(int storeId, int bookId)
+        {
+            using var context = new Lab2DatabaseContext();
+            {
+                var inventory = context.Inventories.Where(i => i.StoreId == storeId).ToList();
+                var book = context.Books.Select(b => b.Isbn13).ToList();
+                var count = context.Inventories.Count();
+                if (inventory.Exists(i => i.Isbn == book[bookId]))
+                {
+                    Console.WriteLine(" Hur många böker vill du ta bort?");
+                    string input = Console.ReadLine();
+
+                    if (int.TryParse(input, out int amount))
+                    {
+
+
+                        foreach (var found in inventory)
+                        {
+                            if (found != null && found.Isbn == book[bookId] && found.StoreId == storeId)
+                            {
+
+                                found.Stock = found.Stock - amount;
+                                if (found.Stock <= 0)
+                                {
+                                    context.Inventories.Remove(found);
+                                }
+                                context.SaveChanges();
+                            }
+                        }
+
+
+                    }
+                }
+
+            }
+        }
     }
 }
