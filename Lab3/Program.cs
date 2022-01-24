@@ -2,9 +2,6 @@
 
 Menu();
 
-//Console.WriteLine(books);
-//AddOrRemove.Remove(found,books);
-
 static void Menu()
 {
 
