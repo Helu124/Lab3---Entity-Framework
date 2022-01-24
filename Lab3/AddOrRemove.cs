@@ -19,7 +19,6 @@ namespace Lab3
                 var count = context.Inventories.Count();
                 if (inventory.Exists(i => i.Isbn == book[bookId]))
                 {
-                    Console.WriteLine(" Hur många böker vill du ha?");
                     string input = Console.ReadLine();
 
                     if (int.TryParse(input, out int amount))
@@ -41,7 +40,6 @@ namespace Lab3
                 else if (inventory.Exists(i => i.Isbn != book[bookId]))
 
                 {
-                    Console.WriteLine(" Hur många böker vill du ha?");
                     string input = Console.ReadLine();
 
                     if (int.TryParse(input, out int amount))
@@ -68,7 +66,6 @@ namespace Lab3
                 var count = context.Inventories.Count();
                 if (inventory.Exists(i => i.Isbn == book[bookId]))
                 {
-                    Console.WriteLine(" Hur många böker vill du ta bort?");
                     string input = Console.ReadLine();
 
                     if (int.TryParse(input, out int amount))

@@ -9,7 +9,7 @@ using Lab3.Data;
 
 namespace Lab3
 {
-    public class find
+    public class Find
     {
         public static int SearchStore()
         {
@@ -31,6 +31,7 @@ namespace Lab3
                 }
                 return -1;
             }
+
         }
 
         public static int FindBooks(int storeId, int addOrRemove)
@@ -52,7 +53,7 @@ namespace Lab3
                             {
                                 int j = i + 1;
                                 books = context.Books.Where(b => b.Isbn13 == inventory[i].Isbn).ToList();
-                                
+
                                 Console.WriteLine($"({j}) titel: {books[0].Title} amount: {inventory[i].Stock}");
                             }
 
@@ -62,21 +63,22 @@ namespace Lab3
                         {
                             int i = 0;
                             foreach (var item in books)
-                            {i++;
+                            {
+                                i++;
                                 Console.WriteLine($"({i}) titel:{item.Title}");
                             }
 
                             break;
 
                         }
-                        
+
                 }
                 int bookindex;
 
                 string input2 = Console.ReadLine();
                 if (int.TryParse(input2, out bookindex))
                 {
-                    return bookindex-1;
+                    return bookindex - 1;
 
                 }
 
